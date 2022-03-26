@@ -1,0 +1,52 @@
+Assignment 1:
+
+ - Given a sequence, find the first quartile range , second quartile range, third quartile range, fourth range
+ 1,2,3,4.....100
+
+ The first quartile 1,,,25
+ the second quartile 26..50
+ the third  quartile 51...75
+ the fourth 76..100
+
+ list - bidirectional iterator
+ vector - random iterator
+ forward_list - forward iterator
+
+ FindQuartileForwardIterator()
+
+ Question: How do you find the middle element of a linked list.
+
+ Asssignment 2:
+ Create a class (template) IteratorRange
+  ctor - two parameters -  each parameter is an iterator
+  begin()
+  end()
+
+std::vector<int>
+ - iterator
+ - callable(int) -> bool
+ 
+[1, 2, 3, 4, 5, 6, 7, 8]
+is_even
+filter.begin iterator for 2
+filter.end iterator beyond 8
+++ filter iterator for 4
+
+Create two classes:
+  - filter: ctor: IteratorRange, callable(predicate)->returns boolean overloads ++, the ++ operator 
+  returns the next iteartor for which the value is true for the callable
+  begin, end
+
+for (int i: V) {
+  
+  std::cout << i;
+}
+
+for (auto begin = std::begin(V), end = std::end(V); begin != end; ++begin) {
+  int i = *begin;
+
+  std::cout << i;
+}
+
+cppinsights.io
+
