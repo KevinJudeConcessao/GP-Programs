@@ -103,6 +103,20 @@ void Reverse(T First, T Last) {
 // += -= (iterator += 3) (iterator -= 3)
 // iter1 iter2 (iter1 - iter2)
 
+template <typename T, size_t N>
+T* Begin(T (&Array)[N]) {
+  return &Array[0];
+}
+
+Begin(Container &C ) {
+  return C.begin();
+}
+
+template <typename T, size_t N>
+T* End(T (&Array)[N]) {
+  return &Array[N];
+}
+
 int main () {
   int array[] ={ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
   int second[10];
@@ -118,6 +132,8 @@ int main () {
   for (int V: second) {
     std::cout << "[SECOND] " << V << "\n";
   }
+
+  std::cout << *(Begin(array)) << *(End(array));
 
 #if 0
   multiply<int> m;
