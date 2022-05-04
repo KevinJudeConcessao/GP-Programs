@@ -1,5 +1,6 @@
 #include <iostream>
 
+
 template <size_t I>
 struct factorial {
   static constexpr size_t value = I * factorial<I - 1>::value;
@@ -34,13 +35,13 @@ struct is_same<T, T> : public true_type {};
 
 template <bool Value, typename T, typename V>
 struct conditional {
-#if 0
-  typedef int type;
-  using type =  int;
-
-  typedef int (*f)(int, int);
-  using f = int (*)(int, int);
-#endif
+//if 0
+//  typedef int type;
+//  using type =  int;
+//
+//  typedef int (*f)(int, int);
+//  using f = int (*)(int, int);
+//#endif
 
   using type = V;
 };
@@ -89,6 +90,45 @@ struct SqrtImpl {
 template <uint32_t Value>
 struct Sqrt : SqrtImpl<1, Value> {};
 
+template <uint32_t Value, uint32_t Start, uint32_t End>
+struct sqrt_impl;
+
+template <uint32_t Value, uint32_t Start, uint32_t End>
+struct sqrt_impl { 
+  static constexpr uint32_t mid = (Start + End) >> 1;
+  
+  using T = typename conditional<(mid * mid) < Value, 
+                                    sqrt_impl<Value, mid, End>, 
+                                    sqrt_impl<Value, Start, mid>>
+                          ::type;
+
+  static constexpr uint32_t val = T::val;
+};
+
+template <uint32_t Value, uint32_t T>
+struct sqrt_impl<Value, T, T> {
+  static constexpr uint32_t val = T;
+};
+
+
+template <uint32_t Value>
+struct sqrt : sqrt_impl<Value, 1, Value> {};
+
+
+int isqrt(int Value, int start, int last) {
+  int mid = (start + last) / 2;
+  
+  if (start == last)
+    return start;
+
+  if ((mid * mid) <= Value)
+    return isqrt(Value, mid, last);
+  else
+    return isqrt(Value, start, mid - 1);
+}
+
+// isqrt(100, 1, 100);
+
 int main() {
   std::cout << integral_constant<int, 5>::value << std::endl;
   std::cout << true_type::value << std::endl;
@@ -98,9 +138,11 @@ int main() {
   std::cout << is_same<typename conditional<sizeof(int) == 4, float, double>::type, float>::value << std::endl;
   std::cout << is_same<typename conditional<sizeof(int) == sizeof(long), float, double>::type, double>::value << std::endl;
 
-//  std::cout << is_same<typename enable_if<sizeof(int) == 4, float>::type, float>::value << std::endl;
+  std::cout << "size_t: " << is_same<unsigned long, size_t>::value << std::endl; 
 
-  std::cout << Sqrt<121>::value << std::endl;
+//  std::cout << is_same<typename enable_if<sizeof(int) == 4, float>::type, float>::value << std::endl;
+  constexpr int N = 100;
+  std::cout << sqrt<N>::val << std::endl;
 //std::cout << is_same<typename enable_if<sizeof(int) == sizeof(char), bool>::type, bool>::value << std::endl;
 
   return 0;
